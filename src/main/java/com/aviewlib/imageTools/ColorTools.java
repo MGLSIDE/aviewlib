@@ -27,7 +27,7 @@ public class ColorTools
 			}
 			red = colors >> 16 & 255;
 			green = colors >> 8 & 255;
-			blue = colors & 0xFF;
+			blue = colors & 255;
 			return Alaph << 24 | red << 16 | green << 8 | blue;
 		}
 		if (cofs == Bitmap.Config.ALPHA_8)
@@ -72,6 +72,7 @@ public class ColorTools
 
 		throw new ImageOperationException("Not an ARGB color, or not a color");
 	}
+	
 	public int getAlaph(int Color, Bitmap.Config  fomat)
 	{
 		if (fomat == Bitmap.Config.ARGB_8888)
