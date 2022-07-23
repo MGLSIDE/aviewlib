@@ -39,7 +39,7 @@ public class ImageCanvas
 		if (x == 0 | y == 0)
 		{
 			throw new ImageOperationException("The length and width of the picture cannot be 0");
-
+             
 
 
 
