@@ -9,7 +9,7 @@ public class ColorTools
 	{
 		int red;
 		int green;
-	
+
 		int blue;
 		/*Bitmap.Config.RGBA_F16
 		 Bitmap.Config.HARDWARE
@@ -56,7 +56,57 @@ public class ColorTools
 		}
 		throw new ImageOperationException("Not an ARGB color, or not a color");
 	}
+	public int setAlaph(Color colors , int Alaph, Bitmap.Config cofs)
+	{
+		int red;
+		int green;
 
+		int blue;
+		/*Bitmap.Config.RGBA_F16
+		 Bitmap.Config.HARDWARE
+		 Bitmap.Config.ALPHA_8
+		 Bitmap.Config.RGB_565
+		 Bitmap.Config.ARGB_8888
+		 Bitmap.Config.ARGB_4444*/
+		if (cofs == Bitmap.Config.ARGB_8888)
+		{
+			if (Alaph > 255)
+			{
+				throw new ImageOperationException("Alaph Value too large.");
+
+
+			}
+			red = colors.getColor() >> 16 & 255;
+			green = colors.getColor() >> 8 & 255;
+			blue = colors.getColor() & 255;
+			return Alaph << 24 | red << 16 | green << 8 | blue;
+		}
+		if (cofs == Bitmap.Config.ALPHA_8)
+		{
+
+			if (Alaph > 255)
+			{
+				throw new ImageOperationException("Alaph Value too large.");
+
+
+			}
+			return Alaph;
+
+		}
+		if (cofs == Bitmap.Config.ARGB_4444)
+		{
+			if (Alaph > 15)
+			{
+				throw new ImageOperationException("Alaph Value too large.");
+
+			}
+			red = colors.getColor() >> 8 & 15;
+			green = colors.getColor() >> 4 & 15;
+			blue = colors.getColor() & 15;
+			return Alaph << 12 | red << 8 | green << 4 | blue;
+		}
+		throw new ImageOperationException("Not an ARGB color, or not a color");
+	}
 	public int getAlaph(Color colors)
 	{
 		if (colors.getConfig() == Bitmap.Config.ARGB_8888)
@@ -72,7 +122,7 @@ public class ColorTools
 
 		throw new ImageOperationException("Not an ARGB color, or not a color");
 	}
-	
+
 	public int getAlaph(int Color, Bitmap.Config  fomat)
 	{
 		if (fomat == Bitmap.Config.ARGB_8888)
