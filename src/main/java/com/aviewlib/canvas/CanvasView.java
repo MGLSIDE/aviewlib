@@ -9,6 +9,12 @@ import java.util.*;
 import java.util.regex.*;
 import android.widget.AutoCompleteTextView.*;
 import android.app.*;
+import com.aviewlib.Annotations.*;
+@AndroidUsetDefView(
+Author="MGLSIDE",
+DefDraw=true,
+isViewGuroup=false
+)
 public class CanvasView extends View{
 private int ViewHeight=0;
 private int ViewWidth=0;

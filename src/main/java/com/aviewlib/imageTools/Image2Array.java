@@ -10,7 +10,7 @@ public class Image2Array
 
 		return Arrays2image(arrs, null);
 	}
-     
+    
 	public static Bitmap Arrays2image(int[][] arrs, Bitmap.Config cofg)
 	{
 		

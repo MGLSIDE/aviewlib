@@ -9,14 +9,13 @@ import android.media.*;
 public class TransferData
 {
 
-    
-    private static Map dataList = new HashMap<>();
-	
-    public static void setData(String key, Object o)
+
+    private static HashMap dataList = new HashMap<>();
+	 public static void setData(String key, Object o)
 	{
 
         WeakReference value =new WeakReference<>(o);
-		
+	
     
    
         dataList.put(key, value);
