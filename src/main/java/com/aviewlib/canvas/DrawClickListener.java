@@ -5,10 +5,5 @@ import android.content.*;
 
 public interface DrawClickListener
 {
-	
 	public void Draw(Context ctx,CanvasView vthis,  Canvas cas)
-   
-		
-		
-	
 }

@@ -18,17 +18,17 @@ public class Ticker
 	private long mLast;
 
 	private long mOffset;
-   public Object[] ExtendedattributeArray;
+	public Object[] ExtendedattributeArray;
 
 	public Ticker()
 	{
 		init();
 	}
-public void SetExtendedattributeArray(Object[] ays)
-{
-	this.ExtendedattributeArray=ays;
-	
-}
+	public void SetExtendedattributeArray(Object[] ays)
+	{
+		this.ExtendedattributeArray = ays;
+
+	}
 	private void init()
 	{
 		mHandler = new Handler()
@@ -69,7 +69,7 @@ public void SetExtendedattributeArray(Object[] ays)
 
 	public void setPeriod(long period)
 	{
-		mLast=System.currentTimeMillis();
+		mLast = System.currentTimeMillis();
 		mPeriod = period;
 	}
 
@@ -77,11 +77,11 @@ public void SetExtendedattributeArray(Object[] ays)
 	{
 		return mPeriod;
 	}
-	
-	
+
+
 	public void setInterval(long period)
 	{
-		mLast=System.currentTimeMillis();
+		mLast = System.currentTimeMillis();
 		mPeriod = period;
 	}
 
@@ -123,5 +123,5 @@ public void SetExtendedattributeArray(Object[] ays)
 	}
 
 
-	
+
 }

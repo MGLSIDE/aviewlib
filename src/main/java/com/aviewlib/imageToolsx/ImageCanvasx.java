@@ -11,14 +11,11 @@ public class ImageCanvasx extends ImageCanvas
 	Bitmap DrawBitmap;
 	int Bitmapx;
 	int Bitmapy;
-
 	public ImageCanvasx()
 	{
 		this.DrawBitmap = Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888);
 		this.Bitmapx = 0;
 		this.Bitmapy = 0;
-
-
 	}
 	public ImageCanvasx(String ImageName)
 	{
@@ -32,12 +29,10 @@ public class ImageCanvasx extends ImageCanvas
 		this.DrawBitmap = bmps;
 		this.Bitmapy = bmps.getHeight();
 		this.Bitmapx = bmps.getWidth();
-
-
 	}
 	public void DrawImage(String imageName, int x0, int y0)
 	{
 		this.DrawImage(BitmapFactory.decodeFile(imageName), x0, y0);
-		
+
 	}
 }

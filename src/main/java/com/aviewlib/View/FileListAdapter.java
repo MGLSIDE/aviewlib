@@ -2,7 +2,6 @@ package com.aviewlib.View;
 import android.widget.*;
 import android.view.*;
 import android.content.*;
-import org.apache.http.impl.cookie.*;
 
 public class FileListAdapter extends BaseAdapter
 {
@@ -69,8 +68,8 @@ public class FileListAdapter extends BaseAdapter
 		tv.setTextSize(20);
 		tv.setTextColor(0xFF000000);
 		tv.setText(nameArray[p1]);
-		
-		
+
+
 		return tv;
 	}
 

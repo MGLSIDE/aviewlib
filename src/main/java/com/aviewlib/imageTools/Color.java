@@ -1,6 +1,5 @@
 package com.aviewlib.imageTools;
 import android.graphics.*;
-import java.time.temporal.*;
 
 public class Color
 {

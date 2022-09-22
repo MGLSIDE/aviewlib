@@ -33,9 +33,9 @@ import java.io.File;
  * Helper for accessing features in {@link android.content.Context}
  * introduced after API level 4 in a backwards compatible fashion.
  */
-public class ContextCompat {
+public class ContextCompat
+{
     private static final String TAG = "ContextCompat";
-
     private static final String DIR_ANDROID = "Android";
     private static final String DIR_DATA = "data";
     private static final String DIR_OBB = "obb";
@@ -67,7 +67,8 @@ public class ContextCompat {
      *                length-1 will correspond to the top activity on the resulting task stack.
      * @return true if the underlying API was available and the call was successful, false otherwise
      */
-    public static boolean startActivities(Context context, Intent[] intents) {
+    public static boolean startActivities(Context context, Intent[] intents)
+	{
         return startActivities(context, intents, null);
     }
 
@@ -99,12 +100,16 @@ public class ContextCompat {
      * @return true if the underlying API was available and the call was successful, false otherwise
      */
     public static boolean startActivities(Context context, Intent[] intents,
-            Bundle options) {
+										  Bundle options)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 16) {
+        if (version >= 16)
+		{
             ContextCompatJellybean.startActivities(context, intents, options);
             return true;
-        } else if (version >= 11) {
+        }
+		else if (version >= 11)
+		{
             ContextCompatHoneycomb.startActivities(context, intents);
             return true;
         }
@@ -154,17 +159,24 @@ public class ContextCompat {
      * @see Context#getObbDir()
      * @see EnvironmentCompat#getStorageState(File)
      */
-    public static File[] getObbDirs(Context context) {
+    public static File[] getObbDirs(Context context)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 19) {
+        if (version >= 19)
+		{
             return ContextCompatKitKat.getObbDirs(context);
-        } else {
+        }
+		else
+		{
             final File single;
-            if (version >= 11) {
+            if (version >= 11)
+			{
                 single = ContextCompatHoneycomb.getObbDir(context);
-            } else {
+            }
+			else
+			{
                 single = buildPath(Environment.getExternalStorageDirectory(), DIR_ANDROID, DIR_OBB,
-                        context.getPackageName());
+								   context.getPackageName());
             }
             return new File[] { single };
         }
@@ -214,17 +226,24 @@ public class ContextCompat {
      * @see Context#getExternalFilesDir(String)
      * @see EnvironmentCompat#getStorageState(File)
      */
-    public static File[] getExternalFilesDirs(Context context, String type) {
+    public static File[] getExternalFilesDirs(Context context, String type)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 19) {
+        if (version >= 19)
+		{
             return ContextCompatKitKat.getExternalFilesDirs(context, type);
-        } else {
+        }
+		else
+		{
             final File single;
-            if (version >= 8) {
+            if (version >= 8)
+			{
                 single = ContextCompatFroyo.getExternalFilesDir(context, type);
-            } else {
+            }
+			else
+			{
                 single = buildPath(Environment.getExternalStorageDirectory(), DIR_ANDROID, DIR_DATA,
-                        context.getPackageName(), DIR_FILES, type);
+								   context.getPackageName(), DIR_FILES, type);
             }
             return new File[] { single };
         }
@@ -274,28 +293,40 @@ public class ContextCompat {
      * @see Context#getExternalCacheDir()
      * @see EnvironmentCompat#getStorageState(File)
      */
-    public static File[] getExternalCacheDirs(Context context) {
+    public static File[] getExternalCacheDirs(Context context)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 19) {
+        if (version >= 19)
+		{
             return ContextCompatKitKat.getExternalCacheDirs(context);
-        } else {
+        }
+		else
+		{
             final File single;
-            if (version >= 8) {
+            if (version >= 8)
+			{
                 single = ContextCompatFroyo.getExternalCacheDir(context);
-            } else {
+            }
+			else
+			{
                 single = buildPath(Environment.getExternalStorageDirectory(), DIR_ANDROID, DIR_DATA,
-                        context.getPackageName(), DIR_CACHE);
+								   context.getPackageName(), DIR_CACHE);
             }
             return new File[] { single };
         }
     }
 
-    private static File buildPath(File base, String... segments) {
+    private static File buildPath(File base, String... segments)
+	{
         File cur = base;
-        for (String segment : segments) {
-            if (cur == null) {
+        for (String segment : segments)
+		{
+            if (cur == null)
+			{
                 cur = new File(segment);
-            } else if (segment != null) {
+            }
+			else if (segment != null)
+			{
                 cur = new File(cur, segment);
             }
         }
@@ -313,11 +344,15 @@ public class ContextCompat {
      *            The value 0 is an invalid identifier.
      * @return Drawable An object that can be used to draw this resource.
      */
-    public static final Drawable getDrawable(Context context, int id) {
+    public static final Drawable getDrawable(Context context, int id)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 21) {
+        if (version >= 21)
+		{
             return ContextCompatApi21.getDrawable(context, id);
-        } else {
+        }
+		else
+		{
             return context.getResources().getDrawable(id);
         }
     }
@@ -336,11 +371,15 @@ public class ContextCompat {
      * @throws android.content.res.Resources.NotFoundException if the given ID
      *         does not exist.
      */
-    public static final ColorStateList getColorStateList(Context context, int id) {
+    public static final ColorStateList getColorStateList(Context context, int id)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 23) {
+        if (version >= 23)
+		{
             return ContextCompatApi23.getColorStateList(context, id);
-        } else {
+        }
+		else
+		{
             return context.getResources().getColorStateList(id);
         }
     }
@@ -358,11 +397,15 @@ public class ContextCompat {
      * @throws android.content.res.Resources.NotFoundException if the given ID
      *         does not exist.
      */
-    public static final int getColor(Context context, int id) {
+    public static final int getColor(Context context, int id)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 23) {
+        if (version >= 23)
+		{
             return ContextCompatApi23.getColor(context, id);
-        } else {
+        }
+		else
+		{
             return context.getResources().getColor(id);
         }
     }
@@ -377,8 +420,10 @@ public class ContextCompat {
      *
      * @see android.content.pm.PackageManager#checkPermission(String, String)
      */
-    public static int checkSelfPermission(Context context, String permission) {
-        if (permission == null) {
+    public static int checkSelfPermission(Context context, String permission)
+	{
+        if (permission == null)
+		{
             throw new IllegalArgumentException("permission is null");
         }
 
@@ -401,11 +446,15 @@ public class ContextCompat {
      *
      * @see android.content.Context.getFilesDir
      */
-    public final File getNoBackupFilesDir(Context context) {
+    public final File getNoBackupFilesDir(Context context)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 21) {
+        if (version >= 21)
+		{
             return ContextCompatApi21.getNoBackupFilesDir(context);
-        } else {
+        }
+		else
+		{
             ApplicationInfo appInfo = context.getApplicationInfo();
             return createFilesDir(new File(appInfo.dataDir, "no_backup"));
         }
@@ -426,24 +475,32 @@ public class ContextCompat {
      *
      * @return The path of the directory holding application code cache files.
      */
-    public final File getCodeCacheDir(Context context) {
+    public final File getCodeCacheDir(Context context)
+	{
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 21) {
+        if (version >= 21)
+		{
             return ContextCompatApi21.getCodeCacheDir(context);
-        } else {
+        }
+		else
+		{
             ApplicationInfo appInfo = context.getApplicationInfo();
             return createFilesDir(new File(appInfo.dataDir, "code_cache"));
         }
     }
 
-    private synchronized static File createFilesDir(File file) {
-        if (!file.exists()) {
-            if (!file.mkdirs()) {
-                if (file.exists()) {
+    private synchronized static File createFilesDir(File file)
+	{
+        if (!file.exists())
+		{
+            if (!file.mkdirs())
+			{
+                if (file.exists())
+				{
                     // spurious failure; probably racing with another process for this app
                     return file;
                 }
-                
+
                 return null;
             }
         }

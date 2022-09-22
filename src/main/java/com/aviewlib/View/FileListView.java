@@ -17,19 +17,30 @@ public class FileListView extends ListView
 	public  FileListAdapter fileAdapter;
 	public  String[] FileNameList;
 	public  String[] FilePathList;
-
     private onFileItemClick monFileItemClick=null;
+
+
 	public FileListView(Context contxt)
 	{
 		super(contxt);
 		inits();
 	}
-	public void setOnFileItemClick(onFileItemClick click){
-		monFileItemClick=click;
+
+	public void setDir(String str)
+	{
+		CurrentDir = str;
+		inits();
+
 	}
-	
-	
-	
+
+
+	public void setOnFileItemClick(onFileItemClick click)
+	{
+		monFileItemClick = click;
+	}
+
+
+
 	public FileListView(Context contxt, AttributeSet attr)
 	{
 
@@ -56,7 +67,7 @@ public class FileListView extends ListView
 
 	private String[]  handleArray(String[] sarr)
 	{
-		String[] ret=new String[sarr.length+1];
+		String[] ret=new String[sarr.length + 1];
 		ret[0] = "...";
 		for (int i=1;i < sarr.length + 1;i++)
 		{
@@ -106,11 +117,11 @@ public class FileListView extends ListView
 			File FileItem=new File(FilePathList[position]);
 			if (this.monFileItemClick != null)
 			{
-				result = monFileItemClick.onClick(view, position, id,!FileItem.isDirectory(),FileItem.toString());
+				result = monFileItemClick.onClick(this, view, position, id, !FileItem.isDirectory(), FileItem.toString());
 			}
-			if (FileItem.isDirectory())
+			if (FileItem.isDirectory() && result == true)
 			{
-				
+
 				CurrentDir = FileItem.toString();
 				Refresh();
 			}
@@ -140,7 +151,7 @@ public class FileListView extends ListView
 
 	public static interface onFileItemClick
 	{
-		public boolean onClick(View view, int position, long id, boolean isFile,String path);
+		public boolean onClick(FileListView filst, View view, int position, long id, boolean isFile, String path);
 
 	}
 

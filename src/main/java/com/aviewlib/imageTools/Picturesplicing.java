@@ -1,10 +1,7 @@
 package com.aviewlib.imageTools;
 import android.graphics.*;
-
-
 import android.graphics.drawable.*;
 import android.widget.*;
-import android.media.*;
 import android.util.*;
 public class Picturesplicing
 {
@@ -80,7 +77,7 @@ public class Picturesplicing
 		}
 		Bitmap SaveBitmp=Bitmap.createBitmap(getBmpArrWidth(bmparr), Gethighestheight(bmparr),  SaveFormat);
 		int Offset=0;
-		
+
 		int[][] BitmapPixelArray;
 		int i=0;
 		int x=0;
