@@ -12,13 +12,13 @@ import android.view.accessibility.*;
 public class FileListView extends ListView
 {
 
-	private String CurrentDir;
-	private File CurrentDirFile;
-	public  FileListAdapter fileAdapter;
-	public  String[] FileNameList;
-	public  String[] FilePathList;
-    private onFileItemClick monFileItemClick=null;
-
+	private  onFileItemClick monFileItemClick;
+	private  FileListAdapter fileAdapter;
+	private  String[] FileNameList;
+	private  String[] FilePathList;
+	private  boolean isRefreshoperprogre;
+    private  File CurrentDirFile;
+	private  String CurrentDir;
 
 	public FileListView(Context contxt)
 	{
@@ -29,11 +29,13 @@ public class FileListView extends ListView
 	public void setDir(String str)
 	{
 		CurrentDir = str;
-		inits();
-
+		Refresh();
+		isRefreshoperprogre = true;
 	}
-
-
+	public void setFileView(FileListAdapter.FileView fileViews)
+	{
+	
+	}
 	public void setOnFileItemClick(onFileItemClick click)
 	{
 		monFileItemClick = click;
@@ -102,8 +104,7 @@ public class FileListView extends ListView
 		CurrentDirFile = new File(CurrentDir);
 		FilePathList = handleArray(getDirPath(CurrentDirFile));
 		FileNameList = handleArray(CurrentDirFile.list());
-		fileAdapter = new FileListAdapter(getContext(), FileNameList, FilePathList);
-		setAdapter(fileAdapter);
+		fileAdapter.setData(FileNameList, FilePathList);
 		fileAdapter.notifyDataSetChanged();
 	}
 
@@ -121,14 +122,17 @@ public class FileListView extends ListView
 			}
 			if (FileItem.isDirectory() && result == true)
 			{
-
-				CurrentDir = FileItem.toString();
-				Refresh();
+				if (isRefreshoperprogre == false)
+				{
+					CurrentDir = FileItem.toString();
+					Refresh();
+				}
+				else
+				{
+					isRefreshoperprogre = false;
+				}
 			}
 		}
-
-
-
 		if (position == 0 && CurrentDirFile.getParent() != null)
 		{
 			if (new File(CurrentDirFile.getParent()).list() != null)
