@@ -2,22 +2,26 @@ package com.aviewlib.View;
 import android.widget.*;
 import android.view.*;
 import android.content.*;
-
+import android.util.*;
+import android.graphics.*;
+//文件列表适配器
 public class FileListAdapter extends BaseAdapter
 {
 
 	private Context ctxt;
 	private String[] pathArray=new String[]{};
 	private String[] nameArray=new String[]{};
-	private FileView mFileView;
+	private FileView mFileView=null;
+	
 
     public static interface FileView
 	{
-		public View ReturnView(String path, String Name);
+		public View ReturnView(Context ctxt,String path,String Name,int p1,View p2,ViewGroup p3);
 	}
-	
-	public void setFileView(FileView fv){
-		mFileView=fv;
+
+	public void setFileView(FileView fv)
+	{
+		mFileView = fv;
 	}
 
 	public FileListAdapter(Context contxt)
@@ -74,15 +78,19 @@ public class FileListAdapter extends BaseAdapter
 	public View getView(int p1, View p2, ViewGroup p3)
 	{
 		// TODO: Implement this method
-		if (mFileView != null)
+		if(mFileView==null)
 		{
-			return mFileView.ReturnView(pathArray[p1], nameArray[p1]);
+			TextView tv=new TextView(ctxt);
+			tv.setTextSize(20);
+			tv.setTextColor(0xFF000000);
+			tv.setText(nameArray[p1]);
+			return tv;
 		}
-		TextView tv=new TextView(ctxt);
-		tv.setTextSize(20);
-		tv.setTextColor(0xFF000000);
-		tv.setText(nameArray[p1]);
-		return tv;
+		else
+		{
+			
+			return mFileView.ReturnView(ctxt,pathArray[p1],nameArray[p1],p1,p2,p3);
+		}
 	}
 
 }

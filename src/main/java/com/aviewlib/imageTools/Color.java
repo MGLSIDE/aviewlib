@@ -10,7 +10,7 @@ public class Color
 		
 	}
 	public int getColor(){
-		
+	
 		return this.ColorValue;
 	}
 	public Color(Bitmap.Config cofs,int Value){

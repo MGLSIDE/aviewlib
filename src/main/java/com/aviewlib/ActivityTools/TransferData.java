@@ -2,10 +2,7 @@ package com.aviewlib.ActivityTools;
 import android.graphics.*;
 import android.widget.*;
 import java.util.*;
-import org.apache.commons.codec.language.bm.*;
 import java.lang.ref.*;
-import java.security.*;
-import android.media.*;
 public class TransferData
 {
 
@@ -68,11 +65,11 @@ public class TransferData
 
 		if (reference != null)
 		{
-
 			Object o = reference.get();
 
 			return o;
 
+			
 		}
 
 		return null;

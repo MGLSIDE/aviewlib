@@ -8,7 +8,7 @@ import android.widget.AdapterView.*;
 import java.io.*;
 import java.util.*;
 import android.view.accessibility.*;
-
+//文件列表控件
 public class FileListView extends ListView
 {
 
@@ -19,6 +19,7 @@ public class FileListView extends ListView
 	private  boolean isRefreshoperprogre;
     private  File CurrentDirFile;
 	private  String CurrentDir;
+    public   static String PreviouslevelfolderName="...";
 
 	public FileListView(Context contxt)
 	{
@@ -34,7 +35,7 @@ public class FileListView extends ListView
 	}
 	public void setFileView(FileListAdapter.FileView fileViews)
 	{
-	
+		fileAdapter.setFileView(fileViews);
 	}
 	public void setOnFileItemClick(onFileItemClick click)
 	{
@@ -70,7 +71,7 @@ public class FileListView extends ListView
 	private String[]  handleArray(String[] sarr)
 	{
 		String[] ret=new String[sarr.length + 1];
-		ret[0] = "...";
+		ret[0] = PreviouslevelfolderName;
 		for (int i=1;i < sarr.length + 1;i++)
 		{
 			ret[i] = sarr[i - 1];
@@ -135,7 +136,12 @@ public class FileListView extends ListView
 		}
 		if (position == 0 && CurrentDirFile.getParent() != null)
 		{
-			if (new File(CurrentDirFile.getParent()).list() != null)
+			if (new File(CurrentDirFile.getParent()).list() == null)
+			{
+				fileAdapter.setData(new String[]{PreviouslevelfolderName},new String[]{PreviouslevelfolderName});
+				fileAdapter.notifyDataSetChanged();
+			}
+			else
 			{
 				playSoundEffect(SoundEffectConstants.CLICK);
 				CurrentDir = CurrentDirFile.getParent();
@@ -151,12 +157,9 @@ public class FileListView extends ListView
 		return result;
 	}
 
-
-
 	public static interface onFileItemClick
 	{
 		public boolean onClick(FileListView filst, View view, int position, long id, boolean isFile, String path);
-
 	}
 
 }

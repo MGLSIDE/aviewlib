@@ -3,7 +3,8 @@ import android.graphics.*;
 import java.io.*;
 import com.aviewlib.imageTools.*;
 
-public class SaveImageAfter
+
+public class SaveImageAfter 
 {
 	public static void SavePngAfter(Bitmap bitmap, String name)
 	{

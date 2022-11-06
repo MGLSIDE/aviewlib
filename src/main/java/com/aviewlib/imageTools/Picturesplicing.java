@@ -66,8 +66,18 @@ public class Picturesplicing
 		return Tcv;
 	}
 
+
 	public static Bitmap TransverseSplice(Bitmap[] bmparr, Bitmap.Config cofs)
+
 	{
+
+		return TransverseSplice(bmparr, cofs, 0);
+	}
+
+
+	public static Bitmap TransverseSplice(Bitmap[] bmparr, Bitmap.Config cofs, int interval)
+	{
+		//横向拼接图片
 		Bitmap.Config SaveFormat=Bitmap.Config.ARGB_8888;
 
 		if (cofs != null)
@@ -75,7 +85,7 @@ public class Picturesplicing
 			SaveFormat = cofs;
 
 		}
-		Bitmap SaveBitmp=Bitmap.createBitmap(getBmpArrWidth(bmparr), Gethighestheight(bmparr),  SaveFormat);
+		Bitmap SaveBitmp=Bitmap.createBitmap(getBmpArrWidth(bmparr) + (interval * (bmparr.length - 1)), Gethighestheight(bmparr),  SaveFormat);
 		int Offset=0;
 
 		int[][] BitmapPixelArray;
@@ -91,13 +101,11 @@ public class Picturesplicing
 				for (;y < BitmapPixelArray.length;y++)
 				{
 					SaveBitmp.setPixel(x + Offset, y, BitmapPixelArray[y][x]);
-
-
 				}
 				y = 0;
 
 			}
-			Offset = Offset + bmparr[i].getWidth();
+			Offset = Offset + bmparr[i].getWidth()+interval;
 
 
 		}
@@ -107,9 +115,15 @@ public class Picturesplicing
 
 	}
 
+
 	public static Bitmap LongitudinalSplice(Bitmap[] bmparr, Bitmap.Config cofs)
 	{
+		return TransverseSplice(bmparr, cofs, 0);
+	}
 
+	public static Bitmap LongitudinalSplice(Bitmap[] bmparr, Bitmap.Config cofs, int interval)
+	{
+		//纵向拼接图片
 		Bitmap.Config SaveFormat=Bitmap.Config.ARGB_8888;
 
 		if (cofs != null)
@@ -117,7 +131,7 @@ public class Picturesplicing
 			SaveFormat = cofs;
 
 		}
-		Bitmap SaveBitmp=Bitmap.createBitmap(Getwidestpicture(bmparr), getBmpArrHeight(bmparr), SaveFormat);
+		Bitmap SaveBitmp=Bitmap.createBitmap(Getwidestpicture(bmparr), getBmpArrHeight(bmparr) + (interval * (bmparr.length - 1)), SaveFormat);
         int Offset=0;
 		int[][] BitmapPixelArray;
 		int i=0;
@@ -145,7 +159,7 @@ public class Picturesplicing
 
 			y = 0;
 
-			Offset = Offset + bmparr[i].getHeight();
+			Offset = Offset + bmparr[i].getHeight()+interval;
 		}
 		return SaveBitmp;
 
