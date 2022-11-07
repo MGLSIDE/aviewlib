@@ -11,10 +11,12 @@ public  class HandPaintedView extends View
 	private int mov_y;
 	private int Max_X;
 	private int Max_Y;
-
 	private Canvas cas;
+	private Canvas cas2;
 	private Paint paint;//声明画笔
 	private Bitmap bmp;
+	private boolean isBezierCurve;
+
 
 	public HandPaintedView(Context context, AttributeSet attrs)
 	{
@@ -37,20 +39,23 @@ public  class HandPaintedView extends View
 
 	private void initView()
 	{
-		Max_X = 0;
-		Max_Y = 0;
+		Max_X = 1;
+		Max_Y = 1;
+		isBezierCurve = false;
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);//创建一个画笔
+		bmp = Bitmap.createBitmap(Max_X, Max_Y, Bitmap.Config.ARGB_8888);
 		cas = new Canvas();
-		bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		cas2 = new Canvas();
 
         cas.setBitmap(bmp);
-		paint.setStyle(Paint.Style.STROKE);//设置非填充
-		paint.setStrokeWidth(10);//笔宽5像素
-		paint.setColor(Color.BLACK);//设置为红笔
-		paint.setAntiAlias(true);//锯齿不显示
+
+		paint.setStyle(Paint.Style.STROKE);
+		paint.setColor(Color.BLACK);
+		paint.setStrokeWidth(10);
 		paint.setDither(true);
-		paint.setStrokeJoin(Paint.Join.ROUND);//设置图像的结合方式
-		paint.setStrokeCap(Paint.Cap.ROUND);//设置画笔为圆形样式
+		paint.setAntiAlias(true);
+		paint.setStrokeJoin(Paint.Join.ROUND);
+		paint.setStrokeCap(Paint.Cap.ROUND);
 	}
 
 
@@ -59,7 +64,7 @@ public  class HandPaintedView extends View
 	protected void onDraw(Canvas canvas)
 	{
 		canvas.drawBitmap(bmp, 0, 0, null);
-		
+
 		super.onDraw(canvas);
 	}
 	//触摸事件
@@ -69,6 +74,21 @@ public  class HandPaintedView extends View
 		int Action=event.getAction();
 		float event_X=event.getX();
 		float event_Y=event.getY();
+
+		if (event_X > Max_X)
+		{
+			Max_X = (int)Math.ceil(event_X) + 1;
+			bmp = CoverBitmap(bmp);
+			cas.setBitmap(bmp);
+		}
+		if (event_Y > Max_Y)
+		{
+			Max_Y = (int)Math.ceil(event_Y) + 1;
+			bmp = CoverBitmap(bmp);
+			cas.setBitmap(bmp);
+		}
+
+
 		if (Action == MotionEvent.ACTION_MOVE)
 		{//如果拖动
 
@@ -110,21 +130,31 @@ public  class HandPaintedView extends View
 
 	public Bitmap ImportBitmap()
 	{
-		return bmp;
+		return bmp.copy(Bitmap.Config.ARGB_8888, true) ;
 	}
 
-	private Bitmap CopyPixel(Bitmap src, Bitmap aim)
+	public void clear()
 	{
-		for (int i=0;i < src.getHeight();i++)
-		{
-			for (int i2=0;i < src.getWidth();i++)
-			{
+		Max_X = 1;
+		Max_Y = 1;
+		bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		cas.setBitmap(bmp);
+        invalidate();
 
-				aim.setPixel(i2, i, src.getPixel(i2, i));
-
-			}
-		}
-		return aim;
 	}
+
+	private Bitmap CoverBitmap(Bitmap foreground)
+	{
+		Bitmap bmps=Bitmap.createBitmap(Max_X, Max_Y, Bitmap.Config.ARGB_8888);
+
+
+		cas2.setBitmap(bmps);
+		cas2.drawBitmap(foreground, 0, 0, null);//在 0，0坐标开始画入fg ，可以从任意位置画入
+		cas2.save(Canvas.ALL_SAVE_FLAG);//保存   
+		cas2.restore();//存储   
+		return bmps;   
+	}
+
+
 
 }

@@ -6,9 +6,25 @@ import com.aviewlib.imageTools.*;
 
 public class SaveImageAfter 
 {
-	public static void SavePngAfter(Bitmap bitmap, String name)
+	public static void SavePngAfter(Bitmap bitmap, String name) 
 	{
 		File file = new File(name);
+		
+		if (file.exists() == false)
+		{
+
+			try
+			{
+				file.createNewFile();
+			}
+			catch (IOException e)
+			{
+
+				e.printStackTrace();
+			}
+		}
+
+
 		try
 		{
 			FileOutputStream out = new FileOutputStream(file);
@@ -34,8 +50,26 @@ public class SaveImageAfter
 	public static void SaveJpegAfter(Bitmap bitmap, int Compress, String name)
 	{
 		File file = new File(name);
+
+
+
+		if (file.exists() == false)
+		{
+
+			try
+			{
+				file.createNewFile();
+			}
+			catch (IOException e)
+			{
+
+				e.printStackTrace();
+			}
+		}
+
 		try
 		{
+
 			FileOutputStream out = new FileOutputStream(file);
 
 			if (bitmap.compress(Bitmap.CompressFormat.JPEG, Compress, out))
@@ -58,6 +92,20 @@ public class SaveImageAfter
 	public static void SaveWebpAfter(Bitmap bitmap, int Compress, String name)
 	{
 		File file = new File(name);
+		if (file.exists() == false)
+		{
+
+			try
+			{
+				file.createNewFile();
+			}
+			catch (IOException e)
+			{
+
+				e.printStackTrace();
+			}
+		}
+
 		try
 		{
 			FileOutputStream out = new FileOutputStream(file);
