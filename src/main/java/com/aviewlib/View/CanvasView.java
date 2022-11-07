@@ -7,7 +7,6 @@ import android.view.*;
 import android.widget.*;
 import java.util.*;
 import java.util.regex.*;
-import android.widget.AutoCompleteTextView.*;
 import android.app.*;
 
 //画布控件

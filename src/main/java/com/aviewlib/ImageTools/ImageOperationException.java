@@ -1,4 +1,4 @@
-package com.aviewlib.imageTools;
+package com.aviewlib.ImageTools;
 
 public class ImageOperationException extends ArrayIndexOutOfBoundsException
 {
@@ -14,8 +14,9 @@ public class ImageOperationException extends ArrayIndexOutOfBoundsException
 		super(ExceptionExceptionInformation);
 	}
 	
-	public ImageOperationException(String ExceptionExceptionInformation,String ErroImage){
+	public ImageOperationException(String ExceptionExceptionInformation,String ErroImage,String ErroPath){
 		super(ExceptionExceptionInformation);
-	
+	    ErroImagePath=ErroPath;
+		ErroImageName=ErroImage;
 	}
 }

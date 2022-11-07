@@ -1,11 +1,12 @@
-package com.aviewlib.Perm;
+package com.aviewlib.Permission;
 import android.app.*;
 import android.*;
 import android.content.pm.*;
 
-public class Permission
+public class PermissionRequest
 {
     private final static int REQUEST_CODE_ASK_PERMISSIONS = 123;
+	
 	public static void RequestPermission(Activity activity, String[] perm, int reqCode)
 	{
 		int hasWriteContactsPermisson;

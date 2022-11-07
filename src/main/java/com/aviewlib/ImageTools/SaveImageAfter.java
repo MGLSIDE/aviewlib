@@ -1,14 +1,12 @@
-package com.aviewlib.imageToolsx;
+package com.aviewlib.ImageTools;
 import android.graphics.*;
 import java.io.*;
-import com.aviewlib.imageTools.*;
 
-
-public class SaveImageAfter 
+public class SaveImageAfter
 {
-	public static void SavePngAfter(Bitmap bitmap, String name) 
+	public static void SavePngAfter(Bitmap bitmap, String path) 
 	{
-		File file = new File(name);
+		File file = new File(path);
 		
 		if (file.exists() == false)
 		{
@@ -47,9 +45,9 @@ public class SaveImageAfter
 		}
 	}
 
-	public static void SaveJpegAfter(Bitmap bitmap, int Compress, String name)
+	public static void SaveJpegAfter(Bitmap bitmap, int Compress, String path)
 	{
-		File file = new File(name);
+		File file = new File(path);
 
 
 
@@ -89,9 +87,11 @@ public class SaveImageAfter
 
 		}
 	}
-	public static void SaveWebpAfter(Bitmap bitmap, int Compress, String name)
+	
+	
+	public static void SaveWebpAfter(Bitmap bitmap, int Compress, String path)
 	{
-		File file = new File(name);
+		File file = new File(path);
 		if (file.exists() == false)
 		{
 
@@ -127,4 +127,4 @@ public class SaveImageAfter
 
 		}
 	}
-}
+	}

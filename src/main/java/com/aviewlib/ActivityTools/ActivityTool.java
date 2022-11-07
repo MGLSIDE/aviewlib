@@ -3,15 +3,14 @@ import android.app.*;
 public class ActivityTool 
 {
 
-	public static String getAppAPK()
+	public static String getAppAPKPath()
 	{
-
 		return new Application().getApplicationInfo().publicSourceDir;
 	}
 
+	
 	public static String getActivityName(Class<? extends Activity>  actw)
 	{
-
 		return actw.getName();
 	}
 	

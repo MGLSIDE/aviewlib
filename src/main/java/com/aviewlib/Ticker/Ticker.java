@@ -1,4 +1,4 @@
-package com.aviewlib.ticker;
+package com.aviewlib.Ticker;
 import android.os.*;
 import java.util.*;
 public class Ticker

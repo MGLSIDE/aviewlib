@@ -8,6 +8,8 @@ public class TransferData
 
 
     private static HashMap dataList = new HashMap<>();
+	
+	
 	 public static void setData(String key, Object o)
 	{
 
@@ -19,6 +21,7 @@ public class TransferData
 
     }
 
+	
 	public static void setData(int key, Object o)
 	{
 		WeakReference value =new WeakReference<>(o);
@@ -41,6 +44,8 @@ public class TransferData
 		 dataList.remove(Key);
 		 
 	 }
+	 
+	 
     public static Object getData(String key)
 	{
 
@@ -58,6 +63,8 @@ public class TransferData
 		return null;
 
 	}
+	
+	
 	public static Object getData(int key)
 	{
 
