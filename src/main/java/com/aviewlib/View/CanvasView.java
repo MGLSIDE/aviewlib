@@ -8,20 +8,22 @@ import android.widget.*;
 import java.util.*;
 import java.util.regex.*;
 import android.app.*;
+import java.lang.annotation.*;
 
 //画布控件
 public class CanvasView extends View
 {
 
-
+	@Documented
 	private DrawClick mDrawClick=null;
 
 	@Override
+	
 	public CanvasView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
-
+	
 	public CanvasView(Context context, DrawClick drawclick)
 	{
 		super(context);
@@ -38,8 +40,8 @@ public class CanvasView extends View
 	protected void onDraw(Canvas canvas)
 	{
 		mDrawClick.onDraw(this, canvas, getContext());
-      
-	  
+
+
 	}
 
 

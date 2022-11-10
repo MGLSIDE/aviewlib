@@ -1,10 +1,10 @@
 package com.aviewlib.ImageTools;
 
-public class ImageOperationException extends ArrayIndexOutOfBoundsException
+public class ImageOperationException extends RuntimeException
 {
 	
-	public String ErroImageName;
-	public String ErroImagePath;
+	public String ErroImageName=null;
+	public String ErroImagePath=null;
 	public ImageOperationException(){
 		super();
 		

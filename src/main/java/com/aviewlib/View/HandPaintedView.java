@@ -4,9 +4,17 @@ import android.graphics.*;
 import android.content.*;
 import android.util.*;
 import android.widget.*;
+import java.util.*;
+import java.sql.*;
+import android.content.res.*;
+import android.os.*;
+import android.widget.TextView.*;
+import org.w3c.dom.*;
+import java.lang.annotation.*;
 //手动绘图效果实现控件
 public  class HandPaintedView extends View
 {
+	@Documented()
 	private int mov_x;//声明起点坐标
 	private int mov_y;
 	private int Max_X;
@@ -15,9 +23,8 @@ public  class HandPaintedView extends View
 	private Canvas cas2;
 	private Paint paint;//声明画笔
 	private Bitmap bmp;
-	private boolean isBezierCurve;
-
-
+	private boolean isPictureState;
+	private ArrayList<Bitmap> PictureState;
 	public HandPaintedView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
@@ -41,14 +48,16 @@ public  class HandPaintedView extends View
 	{
 		Max_X = 1;
 		Max_Y = 1;
-		isBezierCurve = false;
+		isPictureState = false;
+
+		PictureState = new ArrayList<Bitmap>();
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);//创建一个画笔
 		bmp = Bitmap.createBitmap(Max_X, Max_Y, Bitmap.Config.ARGB_8888);
 		cas = new Canvas();
 		cas2 = new Canvas();
 
         cas.setBitmap(bmp);
-
+		PictureState.add(bmp);
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setColor(Color.BLACK);
 		paint.setStrokeWidth(10);
@@ -64,13 +73,13 @@ public  class HandPaintedView extends View
 	protected void onDraw(Canvas canvas)
 	{
 		canvas.drawBitmap(bmp, 0, 0, null);
-
 		super.onDraw(canvas);
 	}
 	//触摸事件
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
+
 		int Action=event.getAction();
 		float event_X=event.getX();
 		float event_Y=event.getY();
@@ -80,6 +89,7 @@ public  class HandPaintedView extends View
 			Max_X = (int)Math.ceil(event_X) + 1;
 			bmp = CoverBitmap(bmp);
 			cas.setBitmap(bmp);
+
 		}
 		if (event_Y > Max_Y)
 		{
@@ -94,6 +104,9 @@ public  class HandPaintedView extends View
 
 			cas.drawLine(mov_x, mov_y, event_X, event_Y, paint);//画线
 			invalidate();
+
+
+
 		}
 		if (Action == MotionEvent.ACTION_DOWN)
 		{//如果点击
@@ -104,12 +117,18 @@ public  class HandPaintedView extends View
 		}
 		if (Action == MotionEvent.ACTION_UP)
 		{
+			if (isPictureState)
+			{
+				PictureState.add(bmp.copy(Bitmap.Config.ARGB_8888, true));
+			}
 
 		}
 		mov_x = (int) event_X;
 		mov_y = (int) event_Y;
 
+
 		return true;
+
 	}
 
 	public void setPaint(Paint pa)
@@ -133,6 +152,50 @@ public  class HandPaintedView extends View
 		return bmp.copy(Bitmap.Config.ARGB_8888, true) ;
 	}
 
+
+	public void clearPictureState()
+	{
+		if (isPictureState)
+		{
+			PictureState.clear();
+		}
+		else
+		{
+			throw new NotAssociationSettingsException("Please open the picture history state saving setting first.");
+		}
+
+	}
+
+	private void setBitmap(Bitmap bmps)
+	{
+        bmp = bmps;
+		Max_X = bmp.getWidth();
+		Max_Y = bmp.getHeight();
+		cas.setBitmap(bmp);
+		invalidate();
+	}
+
+
+
+	public  void Rollbackstatus()
+	{
+
+		if (isPictureState)
+		{
+			if (PictureState.size() > 1)
+			{
+				PictureState.remove(PictureState.size() - 1);
+				setBitmap(PictureState.get(PictureState.size() - 1));
+
+			}
+		}
+		else
+		{
+			throw new NotAssociationSettingsException("Please open the picture history state saving setting first.");
+
+		}
+	}
+
 	public void clear()
 	{
 		Max_X = 1;
@@ -141,12 +204,31 @@ public  class HandPaintedView extends View
 		cas.setBitmap(bmp);
         invalidate();
 
+		if (isPictureState)
+		{
+			PictureState.add(bmp);
+		}
+	}
+
+	public void HidePictureState()
+	{
+		isPictureState = false;
+	}
+
+
+	public void OpenPictureState()
+	{
+		isPictureState = true;
+	}
+
+	public boolean getIsPictureState()
+	{
+		return isPictureState;
 	}
 
 	private Bitmap CoverBitmap(Bitmap foreground)
 	{
 		Bitmap bmps=Bitmap.createBitmap(Max_X, Max_Y, Bitmap.Config.ARGB_8888);
-
 
 		cas2.setBitmap(bmps);
 		cas2.drawBitmap(foreground, 0, 0, null);//在 0，0坐标开始画入fg ，可以从任意位置画入
@@ -155,6 +237,87 @@ public  class HandPaintedView extends View
 		return bmps;   
 	}
 
+
+
+	@Override
+	public Parcelable onSaveInstanceState()
+	{
+		SaveS sass=new SaveS(super.onSaveInstanceState());
+
+		sass.isPictureState = isPictureState;
+		sass.bmp = bmp;
+		sass.Max_X = Max_X;
+		sass.Max_Y = Max_Y;
+		sass.mov_x = mov_x;
+		sass.mov_y = mov_y;
+		return sass;
+	}
+
+	@Override
+	public void onRestoreInstanceState(Parcelable state)
+	{
+		SaveS sass=(SaveS)state;
+		super.onRestoreInstanceState(sass.getSuperState());
+		bmp = sass.bmp;
+	    isPictureState = sass.isPictureState;
+		Max_X = sass.Max_X;
+		Max_Y = sass.Max_Y;
+		mov_x = sass.mov_x;
+		mov_x = sass.mov_x;
+	
+		cas.setBitmap(bmp);
+
+
+
+	}
+
+	static class SaveS  extends BaseSavedState
+	{
+
+
+		private Bitmap bmp;
+		private boolean isPictureState;
+		private int mov_x;
+		private int mov_y;
+		private int Max_X;
+		private int Max_Y;
+		public SaveS(Parcel source)
+		{
+			super(source);
+			mov_y = source.readInt();
+			mov_x = source.readInt();
+			Max_Y = source.readInt();
+			Max_X = source.readInt();
+			isPictureState = source.readValue(Boolean.class.getClassLoader());
+			bmp = (Bitmap)source.readValue(Bitmap.class.getClassLoader());
+		}
+
+		public SaveS(Parcelable superState)
+		{
+			super(superState);
+		}
+
+		@Override
+		public void writeToParcel(Parcel out, int flags)
+		{
+			super.writeToParcel(out, flags);
+			out.writeValue(bmp);
+			out.writeValue(new Boolean(isPictureState));
+			out.writeInt(Max_X);
+			out.writeInt(Max_Y);
+			out.writeInt(mov_x);
+			out.writeInt(mov_y);
+
+		}
+
+	}
+
+
+
+	/*public void  setIsBezierCurvePath(boolean is)
+	 {
+	 isBezierCurve = is;
+	 }*/
 
 
 }

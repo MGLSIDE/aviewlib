@@ -8,18 +8,20 @@ import android.widget.AdapterView.*;
 import java.io.*;
 import java.util.*;
 import android.view.accessibility.*;
+import android.os.*;
+import android.graphics.*;
 //文件列表控件
 public class FileListView extends ListView
 {
-
+	private  final static String PreviouslevelfolderName="...";
+	public   static String  SuperDirText=PreviouslevelfolderName;
 	private  onFileItemClick monFileItemClick;
 	private  FileListAdapter fileAdapter;
 	private  String[] FileNameList;
 	private  String[] FilePathList;
-	private  boolean isRefreshoperprogre;
     private  File CurrentDirFile;
 	private  String CurrentDir;
-    public   static String PreviouslevelfolderName="...";
+
 
 	public FileListView(Context contxt)
 	{
@@ -27,29 +29,44 @@ public class FileListView extends ListView
 		inits();
 	}
 
+	public FileListView(Context contxt, AttributeSet attr)
+	{
+		super(contxt, attr);
+		inits();
+	}
+
+
+	public FileListView(Context contxt, AttributeSet attr, int defStyleAttr)
+	{
+		super(contxt, attr, defStyleAttr);
+		inits();
+	}
+
+	public void inits()
+	{
+		CurrentDir = "/sdcard";
+		fileAdapter = new FileListAdapter(getContext());
+		setAdapter(fileAdapter);
+		Refresh();
+	}
+
 	public void setDir(String str)
 	{
 		CurrentDir = str;
 		Refresh();
-		isRefreshoperprogre = true;
 	}
+
+
 	public void setFileView(FileListAdapter.FileView fileViews)
 	{
 		fileAdapter.setFileView(fileViews);
 	}
+
 	public void setOnFileItemClick(onFileItemClick click)
 	{
 		monFileItemClick = click;
 	}
 
-
-
-	public FileListView(Context contxt, AttributeSet attr)
-	{
-
-		super(contxt, attr);
-		inits();
-	}
 
 	private String[] getDirPath(File f)
 	{
@@ -67,7 +84,6 @@ public class FileListView extends ListView
 		return flist;
 	}
 
-
 	private String[]  handleArray(String[] sarr)
 	{
 		String[] ret=new String[sarr.length + 1];
@@ -79,29 +95,8 @@ public class FileListView extends ListView
 		return ret;
 	}
 
-
-
-
-	public FileListView(Context contxt, AttributeSet attr, int defStyleAttr)
+	private void Refresh()
 	{
-
-		super(contxt, attr, defStyleAttr);
-		inits();
-	}
-	public void inits()
-	{
-		CurrentDir = "/sdcard";
-		CurrentDirFile = new File(CurrentDir);
-		FileNameList = handleArray(CurrentDirFile.list());
-		FilePathList = handleArray(getDirPath(CurrentDirFile));
-		fileAdapter = new FileListAdapter(getContext(), FileNameList, FilePathList);
-		setAdapter(fileAdapter);
-
-	}
-
-	public void Refresh()
-	{
-
 		CurrentDirFile = new File(CurrentDir);
 		FilePathList = handleArray(getDirPath(CurrentDirFile));
 		FileNameList = handleArray(CurrentDirFile.list());
@@ -110,56 +105,106 @@ public class FileListView extends ListView
 	}
 
 
+
 	public boolean performItemClick(View view, int position, long id) 
 	{
 		boolean result=false;
-		if (position != 0)
+
+		if (monFileItemClick != null)
 		{
-			playSoundEffect(SoundEffectConstants.CLICK);
-			File FileItem=new File(FilePathList[position]);
-			if (this.monFileItemClick != null)
+
+			if (position == 0)
 			{
-				result = monFileItemClick.onClick(this, view, position, id, !FileItem.isDirectory(), FileItem.toString());
-			}
-			if (FileItem.isDirectory() && result == true)
-			{
-				if (isRefreshoperprogre == false)
+				result = monFileItemClick.onSuperDirClick(this, view, CurrentDirFile.getParent());
+				if (result)
 				{
-					CurrentDir = FileItem.toString();
+					CurrentDir = CurrentDirFile.getParent();
+					CurrentDirFile = new File(CurrentDir);
 					Refresh();
 				}
-				else
-				{
-					isRefreshoperprogre = false;
-				}
+				return result;
 			}
-		}
-		if (position == 0 && CurrentDirFile.getParent() != null)
-		{
-			if (new File(CurrentDirFile.getParent()).list() == null)
+
+			File posFile=new File(FilePathList[position]);
+
+			if (posFile.isFile())
 			{
-				fileAdapter.setData(new String[]{PreviouslevelfolderName},new String[]{PreviouslevelfolderName});
-				fileAdapter.notifyDataSetChanged();
+				monFileItemClick.onFileClick(this, view, position, FilePathList[position]);
+				result = true;
+				return result;
 			}
 			else
 			{
-				playSoundEffect(SoundEffectConstants.CLICK);
-				CurrentDir = CurrentDirFile.getParent();
-				Refresh();
-				result = true;
+				result = monFileItemClick.onDirClick(this, view, position, FilePathList[position]);
+
+				if (result)	
+				{
+					CurrentDir = FilePathList[position];
+					Refresh();
+				}
+				return result;
 			}
-		}
-		if (view != null)
-		{
-			view.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
+
+
 		}
 
 		return result;
 	}
 
+
+
+	@Override
+	public Parcelable onSaveInstanceState()
+	{
+		FileListSavedState bss=new FileListSavedState(super.onSaveInstanceState());
+		bss.path = CurrentDir;
+		return bss;
+	}
+
+	@Override
+	public void onRestoreInstanceState(Parcelable state)
+	{
+		FileListSavedState bss=(FileListSavedState)state;
+		super.onRestoreInstanceState(bss.getSuperState());
+		CurrentDir = bss.path;
+		Refresh();
+	}
+
+	static class FileListSavedState extends BaseSavedState
+	{
+		public String path;
+		
+
+		public FileListSavedState(Parcel source)
+		{
+			super(source);
+			path = source.readString();
+		}
+
+		public FileListSavedState(Parcelable superState)
+		{
+			super(superState);
+		}
+
+		@Override
+		public void writeToParcel(Parcel out, int flags)
+		{
+			super.writeToParcel(out, flags);
+			out.writeString(path);	
+		}
+
+	}
+
+	public String getAtPresentDir()
+	{
+		return CurrentDir;
+	}
+	
 	public static interface onFileItemClick
 	{
-		public boolean onClick(FileListView filst, View view, int position, long id, boolean isFile, String path);
+		public void onFileClick(FileListView filst, View view, int position, String path);
+		public boolean onDirClick(FileListView filst, View view, int position, String path);
+		public boolean onSuperDirClick(FileListView filst, View view, String path);
 	}
 
 }
