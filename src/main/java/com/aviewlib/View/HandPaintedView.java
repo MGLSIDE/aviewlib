@@ -12,7 +12,7 @@ import android.widget.TextView.*;
 import org.w3c.dom.*;
 import java.lang.annotation.*;
 //手动绘图效果实现控件
-public  class HandPaintedView extends View
+public   class  HandPaintedView  extends View
 {
 	@Documented()
 	private int mov_x;//声明起点坐标
@@ -73,6 +73,7 @@ public  class HandPaintedView extends View
 	protected void onDraw(Canvas canvas)
 	{
 		canvas.drawBitmap(bmp, 0, 0, null);
+		Log.d("test", StateContext.DataCont + "");
 		super.onDraw(canvas);
 	}
 	//触摸事件
@@ -237,76 +238,79 @@ public  class HandPaintedView extends View
 		return bmps;   
 	}
 
-
-
 	@Override
 	public Parcelable onSaveInstanceState()
 	{
-		SaveS sass=new SaveS(super.onSaveInstanceState());
+		StateContext bss=new StateContext(super.onSaveInstanceState());
 
-		sass.isPictureState = isPictureState;
-		sass.bmp = bmp;
-		sass.Max_X = Max_X;
-		sass.Max_Y = Max_Y;
-		sass.mov_x = mov_x;
-		sass.mov_y = mov_y;
-		return sass;
+		HashMap hsm=new HashMap();
+		hsm.put(1, bmp);
+		hsm.put(2, mov_y);
+		hsm.put(3, mov_x);
+		hsm.put(4, Max_X);
+		hsm.put(5, Max_Y);
+		hsm.put(6, isPictureState);
+		hsm.put(7, paint);
+		hsm.put(8, PictureState);
+
+
+		StateContext.DataHashMap.put(bss.Cont, hsm);
+
+
+		return bss;
 	}
 
 	@Override
 	public void onRestoreInstanceState(Parcelable state)
 	{
-		SaveS sass=(SaveS)state;
-		super.onRestoreInstanceState(sass.getSuperState());
-		bmp = sass.bmp;
-	    isPictureState = sass.isPictureState;
-		Max_X = sass.Max_X;
-		Max_Y = sass.Max_Y;
-		mov_x = sass.mov_x;
-		mov_x = sass.mov_x;
-	
+		StateContext bss=(StateContext)state;
+		super.onRestoreInstanceState(bss.getSuperState());
+
+
+		HashMap hsm=(HashMap)(StateContext.DataHashMap.get(bss.Cont));
+		bmp = (Bitmap)hsm.get(1);
+		mov_y = (int)hsm.get(2);
+		mov_x = (int)hsm.get(3);
+		Max_X = (int)hsm.get(4);
+		Max_Y = (int)hsm.get(5);
+        isPictureState = (boolean)hsm.get(6);
+        paint = (Paint)hsm.get(7);
+		PictureState = (ArrayList<Bitmap>)hsm.get(8);
+
 		cas.setBitmap(bmp);
 
-
-
+		
+		
+			StateContext.DataHashMap.put(bss.Cont,null);
+			
 	}
 
-	static class SaveS  extends BaseSavedState
+
+	public static class StateContext extends BaseSavedState
 	{
+		public static HashMap DataHashMap=new HashMap();
+		public static int DataCont=0;
+		public int Cont=0;
 
 
-		private Bitmap bmp;
-		private boolean isPictureState;
-		private int mov_x;
-		private int mov_y;
-		private int Max_X;
-		private int Max_Y;
-		public SaveS(Parcel source)
+		public StateContext(Parcel source)
 		{
 			super(source);
-			mov_y = source.readInt();
-			mov_x = source.readInt();
-			Max_Y = source.readInt();
-			Max_X = source.readInt();
-			isPictureState = source.readValue(Boolean.class.getClassLoader());
-			bmp = (Bitmap)source.readValue(Bitmap.class.getClassLoader());
+            Cont = source.readInt();
 		}
 
-		public SaveS(Parcelable superState)
+		public StateContext(Parcelable superState)
 		{
 			super(superState);
+			Cont = DataCont + 1;
+			DataCont = DataCont + 1;
 		}
 
 		@Override
 		public void writeToParcel(Parcel out, int flags)
 		{
 			super.writeToParcel(out, flags);
-			out.writeValue(bmp);
-			out.writeValue(new Boolean(isPictureState));
-			out.writeInt(Max_X);
-			out.writeInt(Max_Y);
-			out.writeInt(mov_x);
-			out.writeInt(mov_y);
+			out.writeInt(Cont);
 
 		}
 
@@ -314,10 +318,6 @@ public  class HandPaintedView extends View
 
 
 
-	/*public void  setIsBezierCurvePath(boolean is)
-	 {
-	 isBezierCurve = is;
-	 }*/
 
 
 }
