@@ -18,12 +18,12 @@ public class CanvasView extends View
 	private DrawClick mDrawClick=null;
 
 	@Override
-	
+
 	public CanvasView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
-	
+
 	public CanvasView(Context context, DrawClick drawclick)
 	{
 		super(context);
@@ -76,26 +76,14 @@ public class CanvasView extends View
 		public void onViewMeasure(CanvasView thisview, int widthMeasureSpec, int heightMeasureSpec)
 	}
 
-	public static class GraphicObject
+	public static class GraphicObject extends Canvas
 	{
-		private Canvas mCanvas;
-		private int GraphicHight;
-		private int GraphicWidth;
-		private int GraphicX;
-		private int GraphicY;
+		private Canvas adhecas;
 
-		private GraphicObject()
+		public  GraphicObject(Canvas AdhesionCanvas)
 		{
-
-
+			adhecas = AdhesionCanvas;
 		}
-
-		public static GraphicObject newGrapObject()
-		{
-			GraphicObject grap=new GraphicObject();
-			return grap;
-		}
-
 
 	}
 

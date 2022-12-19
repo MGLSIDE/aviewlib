@@ -23,7 +23,7 @@ public class FileListView extends ListView
 	private  String CurrentDir;
 
 
-	public FileListView(Context contxt)
+	public  FileListView(Context contxt)
 	{
 		super(contxt);
 		inits();
@@ -42,7 +42,7 @@ public class FileListView extends ListView
 		inits();
 	}
 
-	public void inits()
+	private void inits()
 	{
 		CurrentDir = "/sdcard";
 		fileAdapter = new FileListAdapter(getContext());
@@ -183,6 +183,7 @@ public class FileListView extends ListView
 
 		public FileListSavedState(Parcelable superState)
 		{
+			
 			super(superState);
 		}
 
